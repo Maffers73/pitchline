@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Pitchline",
+      "hasCanvas": false,
+      "bodyTextLen": 16144,
+      "bodyTextHash": "a9734c6a42dbf49594096f793a3e3e35fb2b6670e8b52ab268ae74fda09fe3de",
+      "bodyTextPrefix": "Pitchline Board Lab Accuracy AUTO 0 picks · 0 saved SATURDAY 22 ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Pitchline",
+      "hasCanvas": false,
+      "bodyTextLen": 14705,
+      "bodyTextHash": "6eaa2447aabf5d690911a53689aed6c06cd187f587ade3dbb2a3a9a70273f180",
+      "bodyTextPrefix": "Pitchline AUTO 0 saved SATURDAY 22 AUGUST 2026 · BST Win, draw, ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}

@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/outcomes",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Pitchline",
+      "hasCanvas": false,
+      "bodyTextLen": 1290,
+      "bodyTextHash": "5249a9fc31c89aee2aa69d218561a984ebbe0fe2822f7ad370af26f84870424f",
+      "bodyTextPrefix": "Pitchline Board Lab Accuracy 0 picks · 0 saved ACCURACY Daily bo",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/qa-outcomes.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Pitchline",
+      "hasCanvas": false,
+      "bodyTextLen": 1170,
+      "bodyTextHash": "6ad4477efb0f61e557de0ec67d093cf2d9db085b6f985377eef9887578b09300",
+      "bodyTextPrefix": "Pitchline 0 picks · 0 saved ACCURACY Daily book One card per day",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/qa-outcomes-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/qa-outcomes.json"
+}

@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8081/outcomes",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Pitchline",
+      "hasCanvas": false,
+      "bodyTextLen": 2060,
+      "bodyTextHash": "c8e9a135bd6e1b12e8326104c1cf3c1662b8e3d4efc8249eb037bab1bc14a181",
+      "bodyTextPrefix": "Pitchline Board Lab Outcomes 0 picks · 0 saved OUTCOMES Predicte",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/qa-outcomes-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Pitchline",
+      "hasCanvas": false,
+      "bodyTextLen": 1813,
+      "bodyTextHash": "a52851a7900cfb8283c22bf831065262ab0256900079d96e36d1b415d72c3516",
+      "bodyTextPrefix": "Pitchline 0 picks · 0 saved OUTCOMES Predicted vs actual A runni",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/qa-outcomes-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/qa-outcomes-built.json"
+}

@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/?country=England",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Pitchline",
+      "hasCanvas": false,
+      "bodyTextLen": 4746,
+      "bodyTextHash": "aced2d9d2ed362500f79518fc199905b7b51773ecdc6a41e8884c07b2abb6cdf",
+      "bodyTextPrefix": "Pitchline Board Lab Previous 0 picks · 0 saved FRIDAY 21 AUGUST ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/qa-england.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Pitchline",
+      "hasCanvas": false,
+      "bodyTextLen": 4258,
+      "bodyTextHash": "b8cbc79a378fb9c7000939b4425b999de74666bac5664fb2348fb2379d04809b",
+      "bodyTextPrefix": "Pitchline 0 picks · 0 saved FRIDAY 21 AUGUST 2026 Win, draw, los",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/qa-england-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/qa-england.json"
+}

@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/lab",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Pitchline",
+      "hasCanvas": false,
+      "bodyTextLen": 2550,
+      "bodyTextHash": "22085009e24f3119a4aa415b683a5c1ecaca1b5dc9069440de9757a9b03c1bca",
+      "bodyTextPrefix": "Pitchline Board Lab Previous 0 picks · 0 saved LAB Any league, a",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/qa-lab.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Pitchline",
+      "hasCanvas": false,
+      "bodyTextLen": 2458,
+      "bodyTextHash": "6c1b2438b0fa8ad9db3bb4ec520246e29af8ae2673185e0f917385ffd1122625",
+      "bodyTextPrefix": "Pitchline 0 picks · 0 saved LAB Any league, any club Pick a Euro",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/qa-lab-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/qa-lab.json"
+}
