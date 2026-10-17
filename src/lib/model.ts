@@ -233,25 +233,6 @@ function clamp(n: number, lo: number, hi: number) {
   return Math.min(hi, Math.max(lo, n));
 }
 
-function pickPublishedScore(cells: ScoreCell[], ticket: Ticket, strength: Prediction["strength"], fallback: ScoreCell) {
-  const maxMargin = strength === "strong" ? 3 : 1;
-  const maxEach = strength === "strong" ? 5 : 3;
-  const side = (c: ScoreCell) => (c.home > c.away ? 1 : c.away > c.home ? 2 : 0);
-  const prefer =
-    ticket === "1" || ticket === "1X" ? 1 : ticket === "2" || ticket === "X2" ? 2 : 0;
-  const allowed = (c: ScoreCell) =>
-    c.home <= maxEach &&
-    c.away <= maxEach &&
-    Math.abs(c.home - c.away) <= maxMargin &&
-    ticketHit(ticket, outcomeOf(c.home, c.away));
-  const matching = cells.filter(allowed);
-  const pool = matching.length ? matching : cells.filter((c) => ticketHit(ticket, outcomeOf(c.home, c.away)));
-  if (!pool.length) return fallback;
-  const directed = pool.filter((c) => side(c) === prefer);
-  const use = directed.length ? directed : pool;
-  return [...use].sort((a, b) => b.p - a.p)[0] ?? fallback;
-}
-
 function teamTier(team: Team) {
   const id = team.div ?? team.league;
   if (CUP_LEAGUES.has(id) && LEAGUE_TIER[id] === 0) return 62;
@@ -462,7 +443,8 @@ export function predict(
 
   const ticket: Ticket = strength === "strong" ? call : p1X >= pX2 ? "1X" : "X2";
   const ticketP = strength === "strong" ? confidence : Math.max(p1X, pX2);
-  const score = pickPublishedScore(cells, ticket, strength, matrix.best);
+  const ranked = [...cells].sort((a, b) => b.p - a.p);
+  const score = ranked[0] ?? matrix.best;
 
   return {
     lambdaHome,
@@ -531,7 +513,7 @@ export function reasonsFor(home: Team, away: Team, pred: Prediction): string[] {
   const xgH = pred.lambdaHome.toFixed(2);
   const xgA = pred.lambdaAway.toFixed(2);
   lines.push(
-    `Attack × defence produces ${xgH} expected home goals and ${xgA} away. Predicted score on the ticket is ${pred.scoreHome}–${pred.scoreAway}.`,
+    `Attack × defence produces ${xgH} expected home goals and ${xgA} away. Most likely score is ${pred.scoreHome}–${pred.scoreAway}.`,
   );
 
   const attGap = home.attack - away.attack;

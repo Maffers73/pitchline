@@ -123,6 +123,16 @@ function MatchPage() {
             <div className="mt-2 text-xs uppercase tracking-widest text-subtle">
               {isFt ? "full time" : inPlay ? clock : "predicted score"}
             </div>
+            {pred.cells.length > 0 && (
+              <div className="mt-1 text-[11px] tabular-nums text-subtle">
+                {[...pred.cells]
+                  .sort((a, b) => b.p - a.p)
+                  .filter((c) => !(c.home === pred.scoreHome && c.away === pred.scoreAway))
+                  .slice(0, 2)
+                  .map((c) => `${c.home}–${c.away}`)
+                  .join("  ·  ")}
+              </div>
+            )}
           </div>
           <div className="flex min-w-0 items-center gap-3 sm:flex-row-reverse">
             <TeamBadge team={away} size="lg" />
