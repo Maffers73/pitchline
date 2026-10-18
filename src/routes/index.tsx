@@ -137,6 +137,7 @@ function Home() {
   const liveFeed = useSlip((s) => s.feed);
   const archive = useSlip((s) => s.archive);
   const watching = useSlip((s) => s.watching);
+  const toggleWatching = useSlip((s) => s.toggleWatching);
   const rememberPicks = useSlip((s) => s.rememberPicks);
   const dayPicks = useSlip((s) => s.dayPicks);
   const feed = liveFeed.length ? liveFeed : archive;
@@ -439,11 +440,34 @@ function Home() {
         <div role="group" aria-label="Continents" className="flex flex-wrap gap-2">
           <Link
             to="/"
-            search={searchFor([], undefined, tab, strengthFilter, undefined)}
-            aria-pressed={!continentFilter && !countryFilter && selected.length === 0}
+            search={() => ({ day: tab })}
+            onClick={() => {
+              if (watching === "bookmarked") toggleWatching();
+            }}
+            aria-pressed={
+              !continentFilter &&
+              !countryFilter &&
+              selected.length === 0 &&
+              !strengthFilter &&
+              !o15Filter &&
+              !o25Filter &&
+              !bttsFilter &&
+              !minP &&
+              !picksFilter &&
+              watching !== "bookmarked"
+            }
             className={cn(
               "inline-flex h-11 items-center rounded-full px-4 text-sm transition-colors",
-              !continentFilter && !countryFilter && selected.length === 0
+              !continentFilter &&
+                !countryFilter &&
+                selected.length === 0 &&
+                !strengthFilter &&
+                !o15Filter &&
+                !o25Filter &&
+                !bttsFilter &&
+                !minP &&
+                !picksFilter &&
+                watching !== "bookmarked"
                 ? "bg-accent text-bg"
                 : "bg-raised text-muted hover:text-fg",
             )}
