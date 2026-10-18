@@ -1,20 +1,24 @@
 import type { ReactNode } from "react";
 import { useEffect } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { FlaskConical, LayoutGrid, LineChart } from "lucide-react";
+import { FlaskConical, LayoutGrid, LineChart, Star } from "lucide-react";
 import { ScoreSync } from "@/components/score-sync";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useSlip } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/", label: "Board", icon: LayoutGrid },
-  { to: "/lab", label: "Lab", icon: FlaskConical },
-  { to: "/outcomes", label: "Accuracy", icon: LineChart },
+  { to: "/", label: "Board", icon: LayoutGrid, picks: false },
+  { to: "/", label: "Picks", icon: Star, picks: true },
+  { to: "/lab", label: "Lab", icon: FlaskConical, picks: false },
+  { to: "/outcomes", label: "Accuracy", icon: LineChart, picks: false },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const picksOn = useRouterState({
+    select: (s) => s.location.pathname === "/" && (s.location.search as { picks?: string }).picks === "1",
+  });
   const hydrate = useSlip((s) => s.hydrate);
 
   useEffect(() => {
@@ -35,11 +39,17 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
           <nav className="hidden items-center gap-1 sm:flex">
             {NAV.map((item) => {
-              const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+              const active = item.picks
+                ? picksOn
+                : item.to === "/"
+                  ? pathname === "/" && !picksOn
+                  : pathname.startsWith(item.to);
               return (
                 <Link
-                  key={item.to}
+                  key={item.label}
                   to={item.to}
+                  search={item.picks ? { picks: "1" } : {}}
+                  aria-label={item.picks ? "Picks of the day" : item.label}
                   className={cn(
                     "inline-flex h-11 items-center gap-2 rounded-sm px-3 text-sm transition-colors",
                     active ? "bg-raised text-fg" : "text-muted hover:text-fg",
@@ -62,13 +72,19 @@ export function AppShell({ children }: { children: ReactNode }) {
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 sm:pt-8">{children}</main>
 
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-bg/95 backdrop-blur-md sm:hidden">
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-4">
           {NAV.map((item) => {
-            const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+            const active = item.picks
+              ? picksOn
+              : item.to === "/"
+                ? pathname === "/" && !picksOn
+                : pathname.startsWith(item.to);
             return (
               <Link
-                key={item.to}
+                key={item.label}
                 to={item.to}
+                search={item.picks ? { picks: "1" } : {}}
+                aria-label={item.picks ? "Picks of the day" : item.label}
                 className={cn(
                   "flex h-16 flex-col items-center justify-center gap-1 text-xs",
                   active ? "text-fg" : "text-muted",
