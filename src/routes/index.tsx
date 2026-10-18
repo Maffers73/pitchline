@@ -585,19 +585,6 @@ function Home() {
               {tabAll.length}
             </span>
           </Link>
-          <Link
-            to="/"
-            search={searchFor(selected, countryFilter, tab, undefined, continentFilter, { picks: picksFilter ? null : true })}
-            aria-pressed={picksFilter}
-            title="Top five strong tickets"
-            className={cn(
-              "inline-flex h-11 items-center rounded-full px-4 text-sm transition-colors",
-              picksFilter ? "bg-accent text-bg" : "bg-raised text-muted hover:text-fg",
-            )}
-          >
-            Picks of the day
-            <span className={cn("ml-1.5 tabular-nums", picksFilter ? "text-bg/70" : "text-subtle")}>{picks.length}</span>
-          </Link>
           {STRENGTHS.map((s) => {
             const on = strengthFilter === s && !picksFilter;
             const copy = strengthCopy(s);
