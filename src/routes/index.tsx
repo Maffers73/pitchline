@@ -1,17 +1,17 @@
-import { accuracyStats, rollingDayBooks,  createFileRoute, Link } from "@tanstack/react-router";
-import { accuracyStats, rollingDayBooks,  ArrowRight } from "lucide-react";
-import { accuracyStats, rollingDayBooks,  useEffect, useMemo, useState } from "react";
-import { accuracyStats, rollingDayBooks,  KickoffRow } from "@/components/kickoff-row";
-import { accuracyStats, rollingDayBooks,  CompBadge } from "@/components/team-badge";
-import { accuracyStats, rollingDayBooks,  Badge } from "@/components/ui/badge";
-import { accuracyStats, rollingDayBooks,  isLeagueId, leaguesOfCountry, leaguesOnContinent, countriesOnContinent, picksOfDay, type BoardTab, type MatchView } from "@/lib/catalogue";
-import { accuracyStats, rollingDayBooks,  boardFromFeed, feedLeagues } from "@/lib/live-board";
-import { accuracyStats, rollingDayBooks,  kickoffZone, kickoffState, kickoffLabel, londonDateHeading, todayKeyNow, tomorrowKeyNow, yesterdayKeyNow } from "@/lib/format";
-import { accuracyStats, rollingDayBooks,  isStrength, pct, strengthCopy, STRENGTHS, type Strength, type TotalsSide } from "@/lib/model";
-import { accuracyStats, rollingDayBooks,  useSlip, type LiveScore, type LoggedScore } from "@/lib/store";
-import { accuracyStats, rollingDayBooks,  monthlyBooks, scoreView, trackableViews } from "@/lib/tracking";
-import { accuracyStats, rollingDayBooks,  CONTINENT_ORDER, COUNTRY_ORDER, LEAGUES, compareBoard, continentChipLabel, countryFlag, isContinent, type Continent, type LeagueId } from "@/lib/types";
-import { accuracyStats, rollingDayBooks,  cn } from "@/lib/utils";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { KickoffRow } from "@/components/kickoff-row";
+import { CompBadge } from "@/components/team-badge";
+import { Badge } from "@/components/ui/badge";
+import { isLeagueId, leaguesOfCountry, leaguesOnContinent, countriesOnContinent, picksOfDay, type BoardTab, type MatchView } from "@/lib/catalogue";
+import { boardFromFeed, feedLeagues } from "@/lib/live-board";
+import { kickoffZone, kickoffState, kickoffLabel, londonDateHeading, todayKeyNow, tomorrowKeyNow, yesterdayKeyNow } from "@/lib/format";
+import { isStrength, pct, strengthCopy, STRENGTHS, type Strength, type TotalsSide } from "@/lib/model";
+import { useSlip, type LiveScore, type LoggedScore } from "@/lib/store";
+import { accuracyStats, monthlyBooks, rollingDayBooks, scoreView, trackableViews } from "@/lib/tracking";
+import { CONTINENT_ORDER, COUNTRY_ORDER, LEAGUES, compareBoard, continentChipLabel, countryFlag, isContinent, type Continent, type LeagueId } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 type Search = {
   leagues?: string;
@@ -177,9 +177,10 @@ function Home() {
   const listIds = watching === "bookmarked" ? new Set(savedIds) : null;
   const listLabel = watching === "bookmarked" ? "Bookmarked" : null;
   const months = useMemo(() => monthlyBooks(trackableViews(espnRows), results), [archive, liveFeed, results]);
-  const yesterdayBook = months
-    .flatMap((m) => m.days)
-    .find((b) => b.key === yesterdayKeyNow());
+  const dayBooks = useMemo(() => rollingDayBooks(trackableViews(espnRows), results, 7), [archive, liveFeed, results]);
+  const yesterdayBook = dayBooks.find((b) => b.key === yesterdayKeyNow());
+  const last3 = dayBooks.slice(0, 3);
+  const last3Stats = accuracyStats(last3.flatMap((b) => b.rows ?? []));
 
   const leagueFilter = watching === "bookmarked" ? [] : filterLeagues;
   const todayBase = useMemo(() => (feed.length ? boardFromFeed(feed, [], "today") : []), [feed]);
@@ -426,13 +427,41 @@ function Home() {
             {upcomingRows.length} to play
             {liveRows.length ? ` · ${liveRows.length} in play` : ""}
             {picksFilter ? " · picks of the day" : ""}
-{picksFilter && (
-              <div className="mb-4 flex gap-4 text-sm">
-                <div>Today: {yesterdayBook ? "calculating" : "—"}</div>
-                <div>Yesterday: {yesterdayBook ? `${yesterdayBook.hits}/${yesterdayBook.n}` : "—"}</div>
+
+        {picksFilter && (
+          <div className="mb-6 space-y-3">
+            {/* Yesterday results ticker */}
+            <div className="rounded-xl border border-border/60 bg-raised/40 p-4">
+              <div className="flex items-baseline justify-between">
+                <div>
+                  <p className="text-2xs uppercase tracking-[0.18em] text-muted">Yesterday</p>
+                  <p className="font-display text-2xl tracking-tight">
+                    {yesterdayBook ? `${yesterdayBook.hits}/${yesterdayBook.n} tickets` : "—"}{" "}
+                    <span className="text-accent">{yesterdayBook ? pct(yesterdayBook.hitRate) : ""}</span>
+                  </p>
+                </div>
+                <span className="text-xs text-muted">Results</span>
               </div>
-            )}
-            
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                {(yesterdayBook?.rows ?? []).slice(0, 8).map((m) => (
+                  <div key={m.fixture.id} className="min-w-[72px] shrink-0 rounded-lg border border-border/50 bg-bg/60 px-2 py-1.5 text-center text-2xs">
+                    <div className="font-medium">{m.home.name.slice(0,3)}–{m.away.name.slice(0,3)}</div>
+                    <div className={m.hit ? "text-accent" : "text-muted"}>{m.hit ? "Hit" : "Miss"}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Last 3 days total accuracy */}
+            <div className="rounded-xl border border-border/60 bg-raised/40 p-4">
+              <p className="text-2xs uppercase tracking-[0.18em] text-muted">Last 3 days</p>
+              <p className="font-display text-2xl tracking-tight">
+                {last3Stats.n ? `${last3Stats.hits}/${last3Stats.n}` : "—"}{" "}
+                <span className="text-accent">{last3Stats.n ? pct(last3Stats.hitRate) : ""}</span>
+              </p>
+            </div>
+          </div>
+        )}
             {strengthFilter ? ` · ${strengthCopy(strengthFilter).label}` : ""}
             {o15Filter ? ` · ${o15Filter === "over" ? "O" : "U"} 1.5` : ""}
             {o25Filter ? ` · ${o25Filter === "over" ? "O" : "U"} 2.5` : ""}
