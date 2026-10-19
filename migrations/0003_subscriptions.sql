@@ -6,3 +6,6 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
+
+-- Ensure trialing status is allowed
+ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS trial_end TIMESTAMPTZ;

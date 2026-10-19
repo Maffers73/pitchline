@@ -16,6 +16,10 @@ import { useSlip } from "@/lib/store";
 import { LEAGUES, type LeagueId, type Team } from "@/lib/types";
 
 export const Route = createFileRoute("/lab")({
+  beforeLoad: async () => {
+    // TODO: wire real session + checkSubscription
+    // For locked lab: throw redirect({ to: "/pricing" });
+  },
   component: LabPage,
 });
 

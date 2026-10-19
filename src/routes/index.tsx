@@ -1,17 +1,17 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { KickoffRow } from "@/components/kickoff-row";
-import { CompBadge } from "@/components/team-badge";
-import { Badge } from "@/components/ui/badge";
-import { isLeagueId, leaguesOfCountry, leaguesOnContinent, countriesOnContinent, picksOfDay, type BoardTab, type MatchView } from "@/lib/catalogue";
-import { boardFromFeed, feedLeagues } from "@/lib/live-board";
-import { kickoffZone, kickoffState, kickoffLabel, londonDateHeading, todayKeyNow, tomorrowKeyNow, yesterdayKeyNow } from "@/lib/format";
-import { isStrength, pct, strengthCopy, STRENGTHS, type Strength, type TotalsSide } from "@/lib/model";
-import { useSlip, type LiveScore, type LoggedScore } from "@/lib/store";
-import { monthlyBooks, scoreView, trackableViews } from "@/lib/tracking";
-import { CONTINENT_ORDER, COUNTRY_ORDER, LEAGUES, compareBoard, continentChipLabel, countryFlag, isContinent, type Continent, type LeagueId } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { accuracyStats, rollingDayBooks,  createFileRoute, Link } from "@tanstack/react-router";
+import { accuracyStats, rollingDayBooks,  ArrowRight } from "lucide-react";
+import { accuracyStats, rollingDayBooks,  useEffect, useMemo, useState } from "react";
+import { accuracyStats, rollingDayBooks,  KickoffRow } from "@/components/kickoff-row";
+import { accuracyStats, rollingDayBooks,  CompBadge } from "@/components/team-badge";
+import { accuracyStats, rollingDayBooks,  Badge } from "@/components/ui/badge";
+import { accuracyStats, rollingDayBooks,  isLeagueId, leaguesOfCountry, leaguesOnContinent, countriesOnContinent, picksOfDay, type BoardTab, type MatchView } from "@/lib/catalogue";
+import { accuracyStats, rollingDayBooks,  boardFromFeed, feedLeagues } from "@/lib/live-board";
+import { accuracyStats, rollingDayBooks,  kickoffZone, kickoffState, kickoffLabel, londonDateHeading, todayKeyNow, tomorrowKeyNow, yesterdayKeyNow } from "@/lib/format";
+import { accuracyStats, rollingDayBooks,  isStrength, pct, strengthCopy, STRENGTHS, type Strength, type TotalsSide } from "@/lib/model";
+import { accuracyStats, rollingDayBooks,  useSlip, type LiveScore, type LoggedScore } from "@/lib/store";
+import { accuracyStats, rollingDayBooks,  monthlyBooks, scoreView, trackableViews } from "@/lib/tracking";
+import { accuracyStats, rollingDayBooks,  CONTINENT_ORDER, COUNTRY_ORDER, LEAGUES, compareBoard, continentChipLabel, countryFlag, isContinent, type Continent, type LeagueId } from "@/lib/types";
+import { accuracyStats, rollingDayBooks,  cn } from "@/lib/utils";
 
 type Search = {
   leagues?: string;
@@ -148,7 +148,7 @@ function Home() {
   const o25Filter = parseSide(rawO25);
   const bttsFilter = parseBtts(rawBtts);
   const minP = parseMinP(rawMinP);
-  const picksFilter = rawPicks === "1";
+  const picksFilter = rawPicks !== "0"; // default to picks of the day as main page
   const selected = parseLeagues(raw);
   const available = feed.length ? feedLeagues(feed, tab) : [];
   const continentFilter: Continent | undefined = isContinent(rawContinent)
@@ -426,6 +426,13 @@ function Home() {
             {upcomingRows.length} to play
             {liveRows.length ? ` · ${liveRows.length} in play` : ""}
             {picksFilter ? " · picks of the day" : ""}
+{picksFilter && (
+              <div className="mb-4 flex gap-4 text-sm">
+                <div>Today: {yesterdayBook ? "calculating" : "—"}</div>
+                <div>Yesterday: {yesterdayBook ? `${yesterdayBook.hits}/${yesterdayBook.n}` : "—"}</div>
+              </div>
+            )}
+            
             {strengthFilter ? ` · ${strengthCopy(strengthFilter).label}` : ""}
             {o15Filter ? ` · ${o15Filter === "over" ? "O" : "U"} 1.5` : ""}
             {o25Filter ? ` · ${o25Filter === "over" ? "O" : "U"} 2.5` : ""}

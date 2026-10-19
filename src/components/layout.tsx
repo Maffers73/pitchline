@@ -5,6 +5,8 @@ import { FlaskConical, LayoutGrid, LineChart, Star } from "lucide-react";
 import { ScoreSync } from "@/components/score-sync";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useSlip } from "@/lib/store";
+import { authClient, signIn } from "@/lib/auth/client";
+import { GROK_PROVIDERS } from "@/lib/auth/providers";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -64,6 +66,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-2 text-xs tabular-nums text-muted sm:gap-3">
             <LivePill />
             <BookmarkLink />
+            <LoginButton />
             <ThemeToggle />
           </div>
         </div>
@@ -144,6 +147,25 @@ function BookmarkLink() {
     >
       Bookmarked
       <span className={cn("tabular-nums", on ? "text-accent/80" : "text-subtle")}>{saved}</span>
+    </button>
+  );
+}
+
+function LoginButton() {
+  const { data: session } = authClient.useSession();
+  if (session?.user) {
+    return (
+      <span className="text-xs px-2 py-1 rounded bg-raised">
+        {session.user.name || session.user.email || "Logged in"}
+      </span>
+    );
+  }
+  return (
+    <button
+      onClick={() => signIn(GROK_PROVIDERS[0].providerId)}
+      className="inline-flex h-9 items-center rounded-sm bg-accent px-3 text-sm font-medium text-white hover:opacity-90"
+    >
+      Login
     </button>
   );
 }

@@ -39,7 +39,7 @@ export async function handleStripeWebhook(request: Request): Promise<Response> {
           INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, status)
           VALUES (${userId}, ${session.customer as string}, ${session.subscription as string}, 'active')
           ON CONFLICT (user_id) DO UPDATE
-          SET stripe_subscription_id = EXCLUDED.stripe_subscription_id, status = 'active'
+          SET stripe_subscription_id = EXCLUDED.stripe_subscription_id, status = session.subscription ? 'trialing' : 'active'
         `;
       }
       break;
