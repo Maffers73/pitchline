@@ -141,11 +141,35 @@ function OutcomesPage() {
   const monthExact = useCard ? selectedCard!.exact : monthStats.exact;
   const monthExactRate = useCard ? selectedCard!.exactRate : monthStats.exactRate;
   const over15 = useCard
-    ? { n: selectedCard!.over15N, hits: selectedCard!.over15Hits }
+    ? {
+        n: selectedCard!.over15N,
+        hits: selectedCard!.over15Hits,
+        overN: selectedCard!.over15OverN,
+        overHits: selectedCard!.over15OverHits,
+        underN: selectedCard!.over15UnderN,
+        underHits: selectedCard!.over15UnderHits,
+      }
     : monthStats.over15;
   const over25 = useCard
-    ? { n: selectedCard!.over25N, hits: selectedCard!.over25Hits }
+    ? {
+        n: selectedCard!.over25N,
+        hits: selectedCard!.over25Hits,
+        overN: selectedCard!.over25OverN,
+        overHits: selectedCard!.over25OverHits,
+        underN: selectedCard!.over25UnderN,
+        underHits: selectedCard!.over25UnderHits,
+      }
     : monthStats.over25;
+  const btts = useCard
+    ? {
+        n: selectedCard!.bttsN ?? 0,
+        hits: selectedCard!.bttsHits ?? 0,
+        yesN: selectedCard!.bttsYesN,
+        yesHits: selectedCard!.bttsYesHits,
+        noN: selectedCard!.bttsNoN,
+        noHits: selectedCard!.bttsNoHits,
+      }
+    : monthStats.btts;
   const pickSet = useCard
     ? { n: selectedCard!.pickN ?? 0, hits: selectedCard!.pickHits ?? 0 }
     : (() => {
@@ -462,6 +486,7 @@ function OutcomesPage() {
               label="Over / under 1.5"
               value={over15.n ? `${over15.hits}/${over15.n}` : "—"}
               hint={over15.n ? pct(over15.hits / over15.n) : "Finished only"}
+              note={sideNote(over15.overN, over15.overHits, "Overs", over15.underN, over15.underHits, "Unders")}
               hits={over15.hits}
               n={over15.n}
             />
@@ -469,8 +494,17 @@ function OutcomesPage() {
               label="Over / under 2.5"
               value={over25.n ? `${over25.hits}/${over25.n}` : "—"}
               hint={over25.n ? pct(over25.hits / over25.n) : "Finished only"}
+              note={sideNote(over25.overN, over25.overHits, "Overs", over25.underN, over25.underHits, "Unders")}
               hits={over25.hits}
               n={over25.n}
+            />
+            <StatCard
+              label="BTTS"
+              value={btts.n ? `${btts.hits}/${btts.n}` : "—"}
+              hint={btts.n ? pct(btts.hits / btts.n) : "Finished only"}
+              note={sideNote(btts.yesN, btts.yesHits, "Yes", btts.noN, btts.noHits, "No")}
+              hits={btts.hits}
+              n={btts.n}
             />
           </section>
         </>
@@ -795,6 +829,13 @@ function DayPanel({
       )}
     </section>
   );
+}
+
+function sideNote(aN: number | undefined, aHits: number | undefined, aLabel: string, bN: number | undefined, bHits: number | undefined, bLabel: string) {
+  const parts: string[] = [];
+  if (aN) parts.push(`${aLabel} ${pct((aHits ?? 0) / aN)}`);
+  if (bN) parts.push(`${bLabel} ${pct((bHits ?? 0) / bN)}`);
+  return parts.length ? parts.join(" · ") : undefined;
 }
 
 function StatCard({
