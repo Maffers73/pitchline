@@ -484,24 +484,24 @@ function OutcomesPage() {
             />
             <StatCard
               label="Over / under 1.5"
-              value={over15.n ? `${over15.hits}/${over15.n}` : "—"}
-              hint={over15.n ? pct(over15.hits / over15.n) : "Finished only"}
+              value={over15.n ? pct(over15.hits / over15.n) : "—"}
+              hint={over15.n ? `${over15.hits}/${over15.n} of all games` : "Finished only"}
               note={sideNote(over15.overN, over15.overHits, "Overs", over15.underN, over15.underHits, "Unders")}
               hits={over15.hits}
               n={over15.n}
             />
             <StatCard
               label="Over / under 2.5"
-              value={over25.n ? `${over25.hits}/${over25.n}` : "—"}
-              hint={over25.n ? pct(over25.hits / over25.n) : "Finished only"}
+              value={over25.n ? pct(over25.hits / over25.n) : "—"}
+              hint={over25.n ? `${over25.hits}/${over25.n} of all games` : "Finished only"}
               note={sideNote(over25.overN, over25.overHits, "Overs", over25.underN, over25.underHits, "Unders")}
               hits={over25.hits}
               n={over25.n}
             />
             <StatCard
               label="BTTS"
-              value={btts.n ? `${btts.hits}/${btts.n}` : "—"}
-              hint={btts.n ? pct(btts.hits / btts.n) : "Finished only"}
+              value={btts.n ? pct(btts.hits / btts.n) : "—"}
+              hint={btts.n ? `${btts.hits}/${btts.n} of all games` : "Finished only"}
               note={sideNote(btts.yesN, btts.yesHits, "Yes", btts.noN, btts.noHits, "No")}
               hits={btts.hits}
               n={btts.n}
@@ -833,8 +833,8 @@ function DayPanel({
 
 function sideNote(aN: number | undefined, aHits: number | undefined, aLabel: string, bN: number | undefined, bHits: number | undefined, bLabel: string) {
   const parts: string[] = [];
-  if (aN) parts.push(`${aLabel} ${pct((aHits ?? 0) / aN)}`);
-  if (bN) parts.push(`${bLabel} ${pct((bHits ?? 0) / bN)}`);
+  if (aN) parts.push(`${aLabel} ${aHits ?? 0}/${aN}`);
+  if (bN) parts.push(`${bLabel} ${bHits ?? 0}/${bN}`);
   return parts.length ? parts.join(" · ") : undefined;
 }
 
