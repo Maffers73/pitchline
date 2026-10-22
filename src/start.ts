@@ -5,8 +5,10 @@ const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === 'serverFn',
 });
 
+const hasClerk = Boolean(process.env.VITE_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY);
+
 export const startInstance = createStart(() => {
   return {
-    requestMiddleware: [csrfMiddleware, clerkMiddleware()],
+    requestMiddleware: hasClerk ? [csrfMiddleware, clerkMiddleware()] : [csrfMiddleware],
   };
 });
