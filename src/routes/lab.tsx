@@ -1,5 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { Show } from "@clerk/tanstack-react-start";
 import { CallChip } from "@/components/call-chip";
 import { FormStrip } from "@/components/form-strip";
 import { ProbBar } from "@/components/prob-bar";
@@ -80,111 +81,129 @@ function LabPage() {
   }
 
   return (
-    <div className="space-y-8">
-      <header>
-        <p className="text-xs uppercase tracking-[0.2em] text-accent">Lab</p>
-        <h1 className="mt-2 font-display text-4xl tracking-tight">Any league, any club</h1>
-        <p className="mt-2 max-w-xl text-muted">
-          Pick any two European clubs and see the same kind of call as the board: 1X2, predicted score, and over/under.
-          Clubs from today’s board are included alongside the catalogue.
-        </p>
-      </header>
-
-      <section className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-6">
-        <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr]">
-          <div className="space-y-3">
-            <LeagueSelect label="Home league" value={homeLeague} onChange={changeHomeLeague} leagues={leagues} />
-            <TeamSelect label="Home" value={home.id} onChange={setHomeId} teams={homeList} />
-          </div>
-          <div className="flex items-end justify-center">
-            <Button variant="secondary" onClick={swap} className="w-full sm:w-auto">
-              Swap
-            </Button>
-          </div>
-          <div className="space-y-3">
-            <LeagueSelect label="Away league" value={awayLeague} onChange={changeAwayLeague} leagues={leagues} />
-            <TeamSelect label="Away" value={away.id} onChange={setAwayId} teams={awayList} />
-          </div>
+    <Show
+      when={{ plan: "weekly" }}
+      fallback={
+        <div className="mx-auto max-w-md py-16 text-center">
+          <h1 className="font-display text-2xl tracking-tight">Lab is locked</h1>
+          <p className="mt-2 text-sm text-muted">
+            Start a 7-day free trial or subscribe to unlock the Lab.
+          </p>
+          <Link
+            to="/pricing"
+            className="mt-6 inline-flex h-10 items-center rounded-sm bg-accent px-4 text-sm font-medium text-accent-fg hover:bg-accent/90"
+          >
+            View plans
+          </Link>
         </div>
-        <label className="mt-4 flex h-11 items-center gap-3 text-sm">
-          <input
-            type="checkbox"
-            checked={neutral}
-            onChange={(e) => setNeutral(e.target.checked)}
-            className="size-4 accent-accent"
-          />
-          Neutral venue — strip the home multiplier
-        </label>
-      </section>
+      }
+    >
+      <div className="space-y-8">
+        <header>
+          <p className="text-xs uppercase tracking-[0.2em] text-accent">Lab</p>
+          <h1 className="mt-2 font-display text-4xl tracking-tight">Any league, any club</h1>
+          <p className="mt-2 max-w-xl text-muted">
+            Pick any two European clubs and see the same kind of call as the board: 1X2, predicted score, and over/under.
+            Clubs from today’s board are included alongside the catalogue.
+          </p>
+        </header>
 
-      {same || !homeList.length || !awayList.length ? (
-        <p className="rounded-lg bg-raised px-4 py-6 text-center text-muted">
-          {!homeList.length || !awayList.length ? "No clubs in that competition yet." : "Pick two different clubs."}
-        </p>
-      ) : (
-        <>
-          <div className="flex flex-col gap-4 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-3">
-            <div className="flex min-w-0 items-center gap-3">
-              <TeamBadge team={home} size="lg" />
-              <div className="min-w-0">
-                <div className="truncate font-display text-2xl tracking-tight">{home.name}</div>
-                <div className="text-xs text-subtle">
-                  {LEAGUES[home.league].country} · {LEAGUES[home.league].name}
+        <section className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-6">
+          <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr]">
+            <div className="space-y-3">
+              <LeagueSelect label="Home league" value={homeLeague} onChange={changeHomeLeague} leagues={leagues} />
+              <TeamSelect label="Home" value={home.id} onChange={setHomeId} teams={homeList} />
+            </div>
+            <div className="flex items-end justify-center">
+              <Button variant="secondary" onClick={swap} className="w-full sm:w-auto">
+                Swap
+              </Button>
+            </div>
+            <div className="space-y-3">
+              <LeagueSelect label="Away league" value={awayLeague} onChange={changeAwayLeague} leagues={leagues} />
+              <TeamSelect label="Away" value={away.id} onChange={setAwayId} teams={awayList} />
+            </div>
+          </div>
+          <label className="mt-4 flex h-11 items-center gap-3 text-sm">
+            <input
+              type="checkbox"
+              checked={neutral}
+              onChange={(e) => setNeutral(e.target.checked)}
+              className="size-4 accent-accent"
+            />
+            Neutral venue — strip the home multiplier
+          </label>
+        </section>
+
+        {same || !homeList.length || !awayList.length ? (
+          <p className="rounded-lg bg-raised px-4 py-6 text-center text-muted">
+            {!homeList.length || !awayList.length ? "No clubs in that competition yet." : "Pick two different clubs."}
+          </p>
+        ) : (
+          <>
+            <div className="flex flex-col gap-4 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <TeamBadge team={home} size="lg" />
+                <div className="min-w-0">
+                  <div className="truncate font-display text-2xl tracking-tight">{home.name}</div>
+                  <div className="text-xs text-subtle">
+                    {LEAGUES[home.league].country} · {LEAGUES[home.league].name}
+                  </div>
+                  <FormStrip form={home.form} />
                 </div>
-                <FormStrip form={home.form} />
+              </div>
+              <div className="order-first text-center sm:order-none">
+                <div className="font-display text-5xl tabular-nums leading-none">
+                  {pred.scoreHome}–{pred.scoreAway}
+                </div>
+                <div className="mt-2 text-xs uppercase tracking-widest text-subtle">predicted</div>
+              </div>
+              <div className="flex min-w-0 items-center gap-3 sm:flex-row-reverse">
+                <TeamBadge team={away} size="lg" />
+                <div className="min-w-0 sm:text-right">
+                  <div className="truncate font-display text-2xl tracking-tight">{away.name}</div>
+                  <div className="text-xs text-subtle">
+                    {LEAGUES[away.league].country} · {LEAGUES[away.league].name}
+                  </div>
+                  <div className="flex sm:justify-end">
+                    <FormStrip form={away.form} />
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="order-first text-center sm:order-none">
-              <div className="font-display text-5xl tabular-nums leading-none">
-                {pred.scoreHome}–{pred.scoreAway}
-              </div>
-              <div className="mt-2 text-xs uppercase tracking-widest text-subtle">predicted</div>
-            </div>
-            <div className="flex min-w-0 items-center gap-3 sm:flex-row-reverse">
-              <TeamBadge team={away} size="lg" />
-              <div className="min-w-0 sm:text-right">
-                <div className="truncate font-display text-2xl tracking-tight">{away.name}</div>
-                <div className="text-xs text-subtle">
-                  {LEAGUES[away.league].country} · {LEAGUES[away.league].name}
-                </div>
-                <div className="flex sm:justify-end">
-                  <FormStrip form={away.form} />
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <CallChip pred={pred} />
-            <TotalsChip call={pred.totals15} size="md" />
-            <TotalsChip call={pred.totals25} size="md" />
-          </div>
-          <ProbBar pred={pred} />
-          <EngineMixTable pred={pred} homeElo={home.elo} awayElo={away.elo} />
-          <div className="grid gap-3 sm:grid-cols-2">
-            <TotalsMarket call={pred.totals15} />
-            <TotalsMarket call={pred.totals25} />
-          </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <CallChip pred={pred} />
+              <TotalsChip call={pred.totals15} size="md" />
+              <TotalsChip call={pred.totals25} size="md" />
+            </div>
+            <ProbBar pred={pred} />
+            <EngineMixTable pred={pred} homeElo={home.elo} awayElo={away.elo} />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <TotalsMarket call={pred.totals15} />
+              <TotalsMarket call={pred.totals25} />
+            </div>
 
-          <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-6">
-              <ScoreGrid pred={pred} />
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-6">
+                <ScoreGrid pred={pred} />
+              </div>
+              <div className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-6">
+                <h2 className="mb-3 font-display text-xl tracking-tight">Why this call</h2>
+                <ol className="space-y-2 text-sm text-muted">
+                  {reasons.map((line) => (
+                    <li key={line} className="flex gap-2">
+                      <span className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                      <span>{line}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
             </div>
-            <div className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-6">
-              <h2 className="mb-3 font-display text-xl tracking-tight">Why this call</h2>
-              <ol className="space-y-2 text-sm text-muted">
-                {reasons.map((line) => (
-                  <li key={line} className="flex gap-2">
-                    <span className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
-                    <span>{line}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
+    </Show>
   );
 }
 
