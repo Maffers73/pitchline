@@ -7,7 +7,6 @@ import { THEME_BOOT } from "@/lib/theme";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "Pitchline: Football 1X2 Predictor App";
-const clerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 export const Route = createRootRoute({
   head: () => ({
@@ -34,29 +33,23 @@ export const Route = createRootRoute({
       },
     ],
   }),
-  component: () => {
-    const inner = (
-      <>
+  component: () => (
+    <html lang="en" className="antialiased" data-theme="light" suppressHydrationWarning>
+      <head>
+        <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
+      </head>
+      <body>
         <PreviewHostBridge />
-        <AuthProvider>
-          <AppShell>
-            <Outlet />
-          </AppShell>
-        </AuthProvider>
-      </>
-    );
-
-    return (
-      <html lang="en" className="antialiased" data-theme="light" suppressHydrationWarning>
-        <head>
-          <HeadContent />
-          <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
-        </head>
-        <body>
-          {clerkKey ? <ClerkProvider publishableKey={clerkKey}>{inner}</ClerkProvider> : inner}
-          <Scripts />
-        </body>
-      </html>
-    );
-  },
+        <ClerkProvider>
+          <AuthProvider>
+            <AppShell>
+              <Outlet />
+            </AppShell>
+          </AuthProvider>
+        </ClerkProvider>
+        <Scripts />
+      </body>
+    </html>
+  ),
 });
