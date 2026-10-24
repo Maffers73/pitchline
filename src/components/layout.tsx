@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useEffect } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
+import { SignInButton, UserButton, Show } from "@clerk/tanstack-react-start";
 import { FlaskConical, LayoutGrid, LineChart, Star } from "lucide-react";
 import { ScoreSync } from "@/components/score-sync";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -65,6 +66,16 @@ export function AppShell({ children }: { children: ReactNode }) {
             <LivePill />
             <BookmarkLink />
             <ThemeToggle />
+            <Show when="signed-out">
+              <SignInButton mode="modal">
+                <button className="inline-flex h-8 items-center rounded-sm bg-accent px-3 text-xs font-medium text-accent-fg hover:bg-accent/90">
+                  Sign in
+                </button>
+              </SignInButton>
+            </Show>
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
           </div>
         </div>
       </header>
@@ -99,7 +110,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </nav>
 
       <footer className="hidden border-t border-border py-6 text-center text-xs text-subtle sm:block">
-        Today and tomorrow’s 1X2 calls. Kick-offs in BST. Live scores update themselves. No sign-in.
+        Today and tomorrow’s 1X2 calls. Kick-offs in BST. Live scores update themselves.
       </footer>
     </div>
   );
